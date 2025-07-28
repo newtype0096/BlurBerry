@@ -8,8 +8,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="MainWindow"
-    Width="800"
-    Height="450"
+    Width="1366"
+    Height="768"
+    MinWidth="1366"
+    MinHeight="768"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -28,7 +30,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <controls:LeftSideBarControl Grid.Column="0" />
