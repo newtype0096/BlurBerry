@@ -11,23 +11,21 @@
     d:DataContext="{d:DesignInstance vm:LeftSideBarControlViewModel}"
     d:DesignHeight="800"
     d:DesignWidth="300"
-    BorderBrush="DimGray"
-    BorderThickness="1"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style TargetType="Border">
-            <Setter Property="BorderBrush" Value="DimGray" />
-            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="{StaticResource LineBrush}" />
+            <Setter Property="BorderThickness" Value="0,0,1,1" />
         </Style>
     </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="65" />
+            <RowDefinition Height="90" />
+            <RowDefinition Height="65" />
+            <RowDefinition Height="200" />
+            <RowDefinition Height="90" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
@@ -147,7 +145,7 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="5">
+        <Border Grid.Row="5" BorderThickness="0,0,1,0">
             <Grid Margin="15">
                 <Grid.RowDefinitions />
             </Grid>
