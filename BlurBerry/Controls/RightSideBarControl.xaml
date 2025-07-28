@@ -19,17 +19,22 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <Border Grid.Row="0">
-            <Grid Margin="15">
-                <TreeView Grid.Row="0" AllowDrop="True">
-                    <TreeViewItem Header="Root" IsExpanded="True">
+            <Border Grid.Row="0">
+                <Grid Margin="15">
+                    <TreeView Grid.Row="0" AllowDrop="True">
                         <TreeViewItem Header="블러 제외 목록" IsExpanded="True">
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
                             <TreeViewItem Header="대상 #0" />
                             <TreeViewItem Header="대상 #0" />
                             <TreeViewItem Header="대상 #0" />
@@ -55,59 +60,63 @@
                             <TreeViewItem Header="영역 #0" />
                             <TreeViewItem Header="영역 #0" />
                             <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
                         </TreeViewItem>
-                    </TreeViewItem>
-                </TreeView>
-            </Grid>
-        </Border>
+                    </TreeView>
+                </Grid>
+            </Border>
 
-        <Border Grid.Row="1">
-            <Grid Margin="15">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Label Grid.Row="0" Content="비디오 정보" />
-
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
+            <Border Grid.Row="1">
+                <Grid Margin="15">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        FontSize="11"
-                        Text="파일명" />
+                    <Label Grid.Row="0" Content="비디오 정보" />
 
-                    <TextBlock
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        FontSize="11"
-                        Text="크기" />
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
 
-                    <TextBlock
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        FontSize="11"
-                        Text="분량" />
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
 
-                    <TextBlock
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        FontSize="11"
-                        Text="타입" />
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="11"
+                            Text="파일명" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            FontSize="11"
+                            Text="크기" />
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            FontSize="11"
+                            Text="분량" />
+
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            FontSize="11"
+                            Text="타입" />
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Border>
-    </Grid>
+            </Border>
+        </Grid>
+    </ScrollViewer>
 </UserControl>
