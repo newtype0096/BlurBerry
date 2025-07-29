@@ -34,7 +34,15 @@
             </Grid.ColumnDefinitions>
 
             <controls:LeftSideBarControl Grid.Column="0" />
-            <controls:VideoControl Grid.Column="1" />
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <controls:VideoControl Grid.Row="0" />
+                <controls:BottomSideBarControl Grid.Row="1" />
+            </Grid>
             <controls:RightSideBarControl Grid.Column="2" />
         </Grid>
     </Grid>
