@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "BlurBerry (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "BlurBerry (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
