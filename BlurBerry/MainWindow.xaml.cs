@@ -47,43 +47,35 @@ namespace BlurBerry
             rootFrame.Navigate(pageType, targetPageArguments, navigationTransitionInfo);
         }
 
-        private void titleBar_PaneToggleRequested(TitleBar sender, object args)
-        {
-            navigationView.IsPaneOpen = !navigationView.IsPaneOpen;
-        }
-
         private void navigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            if (args.IsSettingsSelected)
+            var selectedItem = args.SelectedItemContainer;
+            if (selectedItem == home)
+            {
+                if (rootFrame.CurrentSourcePageType != typeof(HomePage))
+                {
+                    Navigate(typeof(HomePage));
+                }
+            }
+            else if (selectedItem == image)
+            {
+                if (rootFrame.CurrentSourcePageType != typeof(ImagePage))
+                {
+                    Navigate(typeof(ImagePage));
+                }
+            }
+            else if (selectedItem == video)
+            {
+                if (rootFrame.CurrentSourcePageType != typeof(VideoPage))
+                {
+                    Navigate(typeof(VideoPage));
+                }
+            }
+            else if (selectedItem == settings)
             {
                 if (rootFrame.CurrentSourcePageType != typeof(SettingsPage))
                 {
                     Navigate(typeof(SettingsPage));
-                }
-            }
-            else
-            {
-                var selectedItem = args.SelectedItemContainer;
-                if (selectedItem == home)
-                {
-                    if (rootFrame.CurrentSourcePageType != typeof(HomePage))
-                    {
-                        Navigate(typeof(HomePage));
-                    }
-                }
-                else if (selectedItem == image)
-                {
-                    if (rootFrame.CurrentSourcePageType != typeof(ImagePage))
-                    {
-                        Navigate(typeof(ImagePage));
-                    }
-                }
-                else if (selectedItem == video)
-                {
-                    if (rootFrame.CurrentSourcePageType != typeof(VideoPage))
-                    {
-                        Navigate(typeof(VideoPage));
-                    }
                 }
             }
         }

@@ -22,9 +22,7 @@
         <TitleBar
             x:Name="titleBar"
             Title="BlurBerry"
-            Grid.Row="0"
-            IsPaneToggleButtonVisible="True"
-            PaneToggleRequested="titleBar_PaneToggleRequested" />
+            Grid.Row="0" />
 
         <NavigationView
             x:Name="navigationView"
@@ -32,9 +30,9 @@
             Canvas.ZIndex="0"
             IsBackButtonVisible="Collapsed"
             IsPaneToggleButtonVisible="False"
+            IsSettingsVisible="False"
             IsTabStop="False"
             SelectionChanged="navigationView_SelectionChanged">
-            <Frame x:Name="rootFrame" />
             <NavigationView.MenuItems>
                 <NavigationViewItem
                     x:Name="home"
@@ -59,6 +57,15 @@
                 </NavigationViewItem>
             </NavigationView.MenuItems>
 
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem
+                    x:Name="settings"
+                    AutomationProperties.AutomationId="Settings"
+                    Content="설정"
+                    Icon="Setting" />
+            </NavigationView.FooterMenuItems>
+
+            <Frame x:Name="rootFrame" />
         </NavigationView>
     </Grid>
 </Window>
