@@ -6,6 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:BlurBerry.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:BlurBerry.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:HomePageViewModel,
+                                     IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
 
     <Grid>
@@ -29,7 +32,8 @@
             <SplitButton
                 Grid.Column="1"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Center">
+                VerticalAlignment="Center"
+                Command="{Binding OpenFileCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <FontIcon FontSize="13" Glyph="&#xE838;" />
                     <TextBlock Text="파일 열기" />
@@ -37,7 +41,7 @@
 
                 <SplitButton.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Margin="5">
+                        <MenuFlyoutItem Margin="5" Command="{Binding OpenFileCommand}">
                             <MenuFlyoutItem.Template>
                                 <ControlTemplate>
                                     <Grid
@@ -90,7 +94,7 @@
                             </MenuFlyoutItem.Template>
                         </MenuFlyoutItem>
 
-                        <MenuFlyoutItem Margin="5">
+                        <MenuFlyoutItem Margin="5" Command="{Binding OpenFolderCommand}">
                             <MenuFlyoutItem.Template>
                                 <ControlTemplate>
                                     <Grid
@@ -153,7 +157,97 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <TextBlock FontSize="20" Text="최근 미디어" />
+            <TextBlock
+                Grid.Row="0"
+                FontSize="20"
+                Text="최근 미디어" />
+
+            <GridView
+                Grid.Row="1"
+                Margin="0,12,0,0"
+                SelectionMode="None">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+
+                <GridViewItem Margin="0,0,10,10">
+                    <Grid Width="160" Height="120">
+                        <Rectangle Fill="LightGray" />
+                        <StackPanel
+                            Padding="8"
+                            VerticalAlignment="Bottom"
+                            Background="#80000000">
+                            <TextBlock
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="미디어 1" />
+                            <TextBlock Foreground="White" Text="00:00" />
+                        </StackPanel>
+                    </Grid>
+                </GridViewItem>
+                <GridViewItem Margin="0,0,10,10">
+                    <Grid Width="160" Height="120">
+                        <Rectangle Fill="DarkGray" />
+                        <StackPanel
+                            Padding="8"
+                            VerticalAlignment="Bottom"
+                            Background="#80000000">
+                            <TextBlock
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="미디어 2" />
+                            <TextBlock Foreground="White" Text="00:00" />
+                        </StackPanel>
+                    </Grid>
+                </GridViewItem>
+                <GridViewItem Margin="0,0,10,10">
+                    <Grid Width="160" Height="120">
+                        <Rectangle Fill="Gray" />
+                        <StackPanel
+                            Padding="8"
+                            VerticalAlignment="Bottom"
+                            Background="#80000000">
+                            <TextBlock
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="미디어 3" />
+                            <TextBlock Foreground="White" Text="00:00" />
+                        </StackPanel>
+                    </Grid>
+                </GridViewItem>
+                <GridViewItem Margin="0,0,10,10">
+                    <Grid Width="160" Height="120">
+                        <Rectangle Fill="LightSlateGray" />
+                        <StackPanel
+                            Padding="8"
+                            VerticalAlignment="Bottom"
+                            Background="#80000000">
+                            <TextBlock
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="미디어 4" />
+                            <TextBlock Foreground="White" Text="00:00" />
+                        </StackPanel>
+                    </Grid>
+                </GridViewItem>
+                <GridViewItem Margin="0,0,10,10">
+                    <Grid Width="160" Height="120">
+                        <Rectangle Fill="SlateGray" />
+                        <StackPanel
+                            Padding="8"
+                            VerticalAlignment="Bottom"
+                            Background="#80000000">
+                            <TextBlock
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="미디어 5" />
+                            <TextBlock Foreground="White" Text="00:00" />
+                        </StackPanel>
+                    </Grid>
+                </GridViewItem>
+            </GridView>
         </Grid>
     </Grid>
 </Page>
