@@ -10,40 +10,30 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto " />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <!--  Page Header  -->
         <Grid Grid.Row="0" Margin="36,24">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0">
-                <TextBlock
-                    VerticalAlignment="Center"
-                    FontSize="42"
-                    Text="홈" />
-            </Grid>
+            <TextBlock
+                VerticalAlignment="Center"
+                FontSize="42"
+                Text="홈" />
 
-            <SplitButton Grid.Column="1" HorizontalAlignment="Right">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
-                    <FontIcon
-                        Grid.Column="0"
-                        FontSize="13"
-                        Glyph="&#xE838;" />
-
-                    <TextBlock
-                        Grid.Column="1"
-                        Margin="8,0,0,0"
-                        Text="파일 열기" />
-                </Grid>
+            <SplitButton
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontSize="13" Glyph="&#xE838;" />
+                    <TextBlock Text="파일 열기" />
+                </StackPanel>
 
                 <SplitButton.Flyout>
                     <MenuFlyout>
@@ -60,27 +50,25 @@
 
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
                                         <FontIcon
                                             Grid.Column="0"
+                                            VerticalAlignment="Center"
                                             FontSize="16"
                                             Glyph="&#xE838;" />
 
-                                        <Grid Grid.Column="1" Margin="13,0,0,0">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition />
-                                                <RowDefinition />
-                                            </Grid.RowDefinitions>
-
-                                            <TextBlock Grid.Row="0" Text="파일 열기" />
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            Margin="13,0,0,0"
+                                            VerticalAlignment="Center">
+                                            <TextBlock Text="파일 열기" />
                                             <TextBlock
-                                                Grid.Row="1"
                                                 FontSize="12"
                                                 Foreground="DarkGray"
                                                 Text="재생할 파일 찾아보기" />
-                                        </Grid>
+                                        </StackPanel>
 
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="CommonStates">
@@ -115,27 +103,25 @@
 
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
                                         <FontIcon
                                             Grid.Column="0"
+                                            VerticalAlignment="Center"
                                             FontSize="16"
                                             Glyph="&#xE8B7;" />
 
-                                        <Grid Grid.Column="1" Margin="13,0,0,0">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition />
-                                                <RowDefinition />
-                                            </Grid.RowDefinitions>
-
-                                            <TextBlock Grid.Row="0" Text="폴더 열기" />
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            Margin="13,0,0,0"
+                                            VerticalAlignment="Center">
+                                            <TextBlock Text="폴더 열기" />
                                             <TextBlock
-                                                Grid.Row="1"
                                                 FontSize="12"
                                                 Foreground="DarkGray"
                                                 Text="폴더를 선택하고 해당 폴더의 모든 미디어를 가져옵니다." />
-                                        </Grid>
+                                        </StackPanel>
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="CommonStates">
                                                 <VisualState x:Name="Normal" />
@@ -160,10 +146,11 @@
             </SplitButton>
         </Grid>
 
+        <!--  Content Area  -->
         <Grid Grid.Row="1" Margin="36,0,36,24">
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <TextBlock FontSize="20" Text="최근 미디어" />
