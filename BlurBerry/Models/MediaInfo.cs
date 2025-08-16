@@ -85,5 +85,12 @@ namespace BlurBerry.Models
             get => _lastModified;
             set => SetProperty(ref _lastModified, value);
         }
+
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => SetProperty(ref _isSelected, value);
+        }
     }
 }
