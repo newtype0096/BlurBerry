@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BlurBerry.Models
@@ -50,6 +51,7 @@ namespace BlurBerry.Models
         }
 
         private BitmapImage? _thumbnail;
+        [JsonIgnore]
         public BitmapImage? Thumbnail
         {
             get => _thumbnail;
@@ -61,6 +63,27 @@ namespace BlurBerry.Models
         {
             get => _duration;
             set => SetProperty(ref _duration, value);
+        }
+
+        private string? _thumbnailPath;
+        public string? ThumbnailPath
+        {
+            get => _thumbnailPath;
+            set => SetProperty(ref _thumbnailPath, value);
+        }
+
+        private DateTime _dateAdded = DateTime.Now;
+        public DateTime DateAdded
+        {
+            get => _dateAdded;
+            set => SetProperty(ref _dateAdded, value);
+        }
+
+        private DateTime _lastModified;
+        public DateTime LastModified
+        {
+            get => _lastModified;
+            set => SetProperty(ref _lastModified, value);
         }
     }
 }
