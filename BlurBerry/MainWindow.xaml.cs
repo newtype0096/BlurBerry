@@ -57,20 +57,6 @@ namespace BlurBerry
                     Navigate(typeof(HomePage));
                 }
             }
-            else if (selectedItem == image)
-            {
-                if (rootFrame.CurrentSourcePageType != typeof(ImagePage))
-                {
-                    Navigate(typeof(ImagePage));
-                }
-            }
-            else if (selectedItem == video)
-            {
-                if (rootFrame.CurrentSourcePageType != typeof(VideoPage))
-                {
-                    Navigate(typeof(VideoPage));
-                }
-            }
             else if (selectedItem == settings)
             {
                 if (rootFrame.CurrentSourcePageType != typeof(SettingsPage))

@@ -39,22 +39,6 @@
                     AutomationProperties.AutomationId="Home"
                     Content="홈"
                     Icon="Home" />
-                <NavigationViewItem
-                    x:Name="image"
-                    AutomationProperties.AutomationId="Image"
-                    Content="이미지 라이브러리">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE91B;" />
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem
-                    x:Name="video"
-                    AutomationProperties.AutomationId="Video"
-                    Content="비디오 라이브러리">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE8B2;" />
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>

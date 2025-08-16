@@ -17,6 +17,13 @@ using WinRT.Interop;
 
 namespace BlurBerry.ViewModels
 {
+    public enum MediaFilterType
+    {
+        All,
+        Image,
+        Video
+    }
+
     public class HomePageViewModel : ObservableObject
     {
         private readonly HashSet<string> _addedFiles = new HashSet<string>();
@@ -25,6 +32,7 @@ namespace BlurBerry.ViewModels
         public static HomePageViewModel Instance { get; } = new HomePageViewModel();
 
         public ObservableCollection<MediaInfo> MediaInfos { get; } = new ObservableCollection<MediaInfo>();
+        public ObservableCollection<MediaInfo> FilteredMediaInfos { get; } = new ObservableCollection<MediaInfo>();
 
         private bool _hasSelectedItems;
         public bool HasSelectedItems
@@ -47,11 +55,43 @@ namespace BlurBerry.ViewModels
             set => SetProperty(ref _selectedItemCount, value);
         }
 
+        private MediaFilterType _currentFilter = MediaFilterType.All;
+        public MediaFilterType CurrentFilter
+        {
+            get => _currentFilter;
+            set
+            {
+                if (SetProperty(ref _currentFilter, value))
+                {
+                    ApplyFilter();
+                    OnPropertyChanged(nameof(FilterDisplayText));
+                    OnPropertyChanged(nameof(IsAllFilterSelected));
+                    OnPropertyChanged(nameof(IsImageFilterSelected));
+                    OnPropertyChanged(nameof(IsVideoFilterSelected));
+                }
+            }
+        }
+
+        public string FilterDisplayText => CurrentFilter switch
+        {
+            MediaFilterType.All => "전체",
+            MediaFilterType.Image => "이미지",
+            MediaFilterType.Video => "비디오",
+            _ => "전체"
+        };
+
+        public bool IsAllFilterSelected => CurrentFilter == MediaFilterType.All;
+        public bool IsImageFilterSelected => CurrentFilter == MediaFilterType.Image;
+        public bool IsVideoFilterSelected => CurrentFilter == MediaFilterType.Video;
+
         public RelayCommand OpenFileCommand { get; }
         public RelayCommand OpenFolderCommand { get; }
         public RelayCommand ToggleAllSelectionCommand { get; }
         public RelayCommand ClearAllSelectionCommand { get; }
         public RelayCommand DeleteSelectedCommand { get; }
+        public RelayCommand ShowAllCommand { get; }
+        public RelayCommand ShowImagesCommand { get; }
+        public RelayCommand ShowVideosCommand { get; }
 
         public HomePageViewModel()
         {
@@ -60,8 +100,12 @@ namespace BlurBerry.ViewModels
             ToggleAllSelectionCommand = new RelayCommand(ToggleAllSelection);
             ClearAllSelectionCommand = new RelayCommand(ClearAllSelection);
             DeleteSelectedCommand = new RelayCommand(DeleteSelectedItems);
+            ShowAllCommand = new RelayCommand(() => CurrentFilter = MediaFilterType.All);
+            ShowImagesCommand = new RelayCommand(() => CurrentFilter = MediaFilterType.Image);
+            ShowVideosCommand = new RelayCommand(() => CurrentFilter = MediaFilterType.Video);
 
             MediaInfos.CollectionChanged += MediaInfos_CollectionChanged;
+            FilteredMediaInfos.CollectionChanged += FilteredMediaInfos_CollectionChanged;
 
             _ = InitializeAsync();
         }
@@ -141,6 +185,7 @@ namespace BlurBerry.ViewModels
                 }
             }
 
+            ApplyFilter();
             await MediaLibraryService.Instance.CleanupOrphanedThumbnailsAsync(libraryItems);
         }
 
@@ -302,11 +347,51 @@ namespace BlurBerry.ViewModels
 
             MediaInfos.Add(newMediaInfo);
             _addedFiles.Add(file.Path);
+            ApplyFilter();
 
             await MediaLibraryService.Instance.SaveLibraryAsync(MediaInfos.ToList());
         }
 
+        private void ApplyFilter()
+        {
+            FilteredMediaInfos.Clear();
+
+            var filteredItems = CurrentFilter switch
+            {
+                MediaFilterType.All => MediaInfos,
+                MediaFilterType.Image => MediaInfos.Where(x => x.MediaType == MediaType.Image),
+                MediaFilterType.Video => MediaInfos.Where(x => x.MediaType == MediaType.Video),
+                _ => MediaInfos
+            };
+
+            foreach (var item in filteredItems)
+            {
+                FilteredMediaInfos.Add(item);
+            }
+        }
+
         private void MediaInfos_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (MediaInfo item in e.NewItems)
+                {
+                    item.PropertyChanged += MediaInfo_PropertyChanged;
+                }
+            }
+
+            if (e.OldItems != null)
+            {
+                foreach (MediaInfo item in e.OldItems)
+                {
+                    item.PropertyChanged -= MediaInfo_PropertyChanged;
+                }
+            }
+
+            UpdateSelectionState();
+        }
+
+        private void FilteredMediaInfos_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems != null)
             {
@@ -337,10 +422,10 @@ namespace BlurBerry.ViewModels
 
         private void UpdateSelectionState()
         {
-            var selectedItems = MediaInfos.Where(x => x.IsSelected).ToList();
+            var selectedItems = FilteredMediaInfos.Where(x => x.IsSelected).ToList();
             SelectedItemCount = string.Format("선택한 항목 {0}개  •", selectedItems.Count);
             HasSelectedItems = selectedItems.Count > 0;
-            AreAllItemsSelected = MediaInfos.Count > 0 && selectedItems.Count == MediaInfos.Count;
+            AreAllItemsSelected = FilteredMediaInfos.Count > 0 && selectedItems.Count == FilteredMediaInfos.Count;
         }
 
         private void ToggleAllSelection()
@@ -357,7 +442,7 @@ namespace BlurBerry.ViewModels
 
         private void SelectAllItems()
         {
-            foreach (var item in MediaInfos)
+            foreach (var item in FilteredMediaInfos)
             {
                 item.IsSelected = true;
             }
@@ -365,7 +450,7 @@ namespace BlurBerry.ViewModels
 
         private void ClearAllSelection()
         {
-            foreach (var item in MediaInfos)
+            foreach (var item in FilteredMediaInfos)
             {
                 item.IsSelected = false;
             }
@@ -373,12 +458,15 @@ namespace BlurBerry.ViewModels
 
         private async void DeleteSelectedItems()
         {
-            var selectedItems = MediaInfos.Where(x => x.IsSelected).ToList();
+            var selectedItems = FilteredMediaInfos.Where(x => x.IsSelected).ToList();
             
             foreach (var item in selectedItems)
             {
                 MediaInfos.Remove(item);
-                _addedFiles.Remove(item.FilePath);
+                if (item.FilePath is not null)
+                {
+                    _addedFiles.Remove(item.FilePath);
+                }
                 
                 if (!string.IsNullOrEmpty(item.ThumbnailPath) && File.Exists(item.ThumbnailPath))
                 {
@@ -393,6 +481,7 @@ namespace BlurBerry.ViewModels
                 }
             }
 
+            ApplyFilter();
             await MediaLibraryService.Instance.SaveLibraryAsync(MediaInfos.ToList());
         }
     }

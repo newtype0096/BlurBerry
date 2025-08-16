@@ -161,13 +161,83 @@
             </Grid.RowDefinitions>
 
             <!--  Normal Header  -->
-            <TextBlock
+            <Grid
                 Grid.Row="0"
                 Height="50"
                 Padding="0,10,0,0"
-                FontSize="20"
-                Text="최근 미디어"
-                Visibility="{Binding HasSelectedItems, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}" />
+                Visibility="{Binding HasSelectedItems, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="2"
+                    Margin="0,0,36,0"
+                    VerticalAlignment="Center"
+                    Background="Transparent">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid
+                                x:Name="RootGrid"
+                                Background="Transparent"
+                                CornerRadius="5">
+                                <ContentPresenter x:Name="ContentPresenter" />
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal">
+                                            <VisualState.Setters>
+                                                <Setter Target="ContentPresenter.Foreground" Value="#4cb6f0" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="ContentPresenter.Foreground" Value="#4cb6f0" />
+                                                <Setter Target="RootGrid.Background" Value="#393939" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+
+                    <StackPanel Padding="15,10" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,5,0"
+                            Foreground="White"
+                            Text="정렬 기준:" />
+                        <TextBlock Margin="0,0,10,0" Text="{Binding FilterDisplayText}" />
+                        <FontIcon
+                            FontSize="12"
+                            Foreground="White"
+                            Glyph="&#xE70D;" />
+                    </StackPanel>
+
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <RadioMenuFlyoutItem
+                                Command="{Binding ShowAllCommand}"
+                                GroupName="FilterGroup"
+                                IsChecked="{Binding IsAllFilterSelected}"
+                                Text="전체" />
+
+                            <RadioMenuFlyoutItem
+                                Command="{Binding ShowImagesCommand}"
+                                GroupName="FilterGroup"
+                                IsChecked="{Binding IsImageFilterSelected}"
+                                Text="이미지" />
+
+                            <RadioMenuFlyoutItem
+                                Command="{Binding ShowVideosCommand}"
+                                GroupName="FilterGroup"
+                                IsChecked="{Binding IsVideoFilterSelected}"
+                                Text="비디오" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+            </Grid>
 
             <!--  Selection Mode Header  -->
             <Grid
@@ -254,7 +324,7 @@
             <GridView
                 Grid.Row="2"
                 Margin="0,20,0,0"
-                ItemsSource="{Binding MediaInfos}"
+                ItemsSource="{Binding FilteredMediaInfos}"
                 SelectionMode="None">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
