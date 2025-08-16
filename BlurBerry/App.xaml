@@ -12,6 +12,8 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:MediaTypeToVisibilityConverter x:Key="MediaTypeToVisibilityConverter" />
+            <converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
