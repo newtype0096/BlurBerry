@@ -33,7 +33,7 @@
                     MinWidth="20"
                     MinHeight="20"
                     Margin="10,10,3,0"
-                    HorizontalAlignment="Right"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Click="SelectCheckBox_Click"
                     Content=""

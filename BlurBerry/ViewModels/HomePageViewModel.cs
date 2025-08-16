@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlurBerry.Models;
 using BlurBerry.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.Storage;
@@ -16,7 +17,7 @@ using WinRT.Interop;
 
 namespace BlurBerry.ViewModels
 {
-    public class HomePageViewModel
+    public class HomePageViewModel : ObservableObject
     {
         private readonly HashSet<string> _addedFiles = new HashSet<string>();
         private readonly string[] _fileTypeFilter = [".jpg", ".jpeg", ".png", ".mp4", ".avi", ".mkv"];
@@ -25,13 +26,42 @@ namespace BlurBerry.ViewModels
 
         public ObservableCollection<MediaInfo> MediaInfos { get; } = new ObservableCollection<MediaInfo>();
 
+        private bool _hasSelectedItems;
+        public bool HasSelectedItems
+        {
+            get => _hasSelectedItems;
+            set => SetProperty(ref _hasSelectedItems, value);
+        }
+
+        private bool _areAllItemsSelected;
+        public bool AreAllItemsSelected
+        {
+            get => _areAllItemsSelected;
+            set => SetProperty(ref _areAllItemsSelected, value);
+        }
+
+        private string? _selectedItemCount;
+        public string? SelectedItemCount
+        {
+            get => _selectedItemCount;
+            set => SetProperty(ref _selectedItemCount, value);
+        }
+
         public RelayCommand OpenFileCommand { get; }
         public RelayCommand OpenFolderCommand { get; }
+        public RelayCommand ToggleAllSelectionCommand { get; }
+        public RelayCommand ClearAllSelectionCommand { get; }
+        public RelayCommand DeleteSelectedCommand { get; }
 
         public HomePageViewModel()
         {
             OpenFileCommand = new RelayCommand(OpenFileAsync);
             OpenFolderCommand = new RelayCommand(OpenFolderAsync);
+            ToggleAllSelectionCommand = new RelayCommand(ToggleAllSelection);
+            ClearAllSelectionCommand = new RelayCommand(ClearAllSelection);
+            DeleteSelectedCommand = new RelayCommand(DeleteSelectedItems);
+
+            MediaInfos.CollectionChanged += MediaInfos_CollectionChanged;
 
             _ = InitializeAsync();
         }
@@ -272,6 +302,96 @@ namespace BlurBerry.ViewModels
 
             MediaInfos.Add(newMediaInfo);
             _addedFiles.Add(file.Path);
+
+            await MediaLibraryService.Instance.SaveLibraryAsync(MediaInfos.ToList());
+        }
+
+        private void MediaInfos_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (MediaInfo item in e.NewItems)
+                {
+                    item.PropertyChanged += MediaInfo_PropertyChanged;
+                }
+            }
+
+            if (e.OldItems != null)
+            {
+                foreach (MediaInfo item in e.OldItems)
+                {
+                    item.PropertyChanged -= MediaInfo_PropertyChanged;
+                }
+            }
+
+            UpdateSelectionState();
+        }
+
+        private void MediaInfo_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MediaInfo.IsSelected))
+            {
+                UpdateSelectionState();
+            }
+        }
+
+        private void UpdateSelectionState()
+        {
+            var selectedItems = MediaInfos.Where(x => x.IsSelected).ToList();
+            SelectedItemCount = string.Format("선택한 항목 {0}개  •", selectedItems.Count);
+            HasSelectedItems = selectedItems.Count > 0;
+            AreAllItemsSelected = MediaInfos.Count > 0 && selectedItems.Count == MediaInfos.Count;
+        }
+
+        private void ToggleAllSelection()
+        {
+            if (AreAllItemsSelected)
+            {
+                SelectAllItems();
+            }
+            else
+            {
+                ClearAllSelection();
+            }
+        }
+
+        private void SelectAllItems()
+        {
+            foreach (var item in MediaInfos)
+            {
+                item.IsSelected = true;
+            }
+        }
+
+        private void ClearAllSelection()
+        {
+            foreach (var item in MediaInfos)
+            {
+                item.IsSelected = false;
+            }
+        }
+
+        private async void DeleteSelectedItems()
+        {
+            var selectedItems = MediaInfos.Where(x => x.IsSelected).ToList();
+            
+            foreach (var item in selectedItems)
+            {
+                MediaInfos.Remove(item);
+                _addedFiles.Remove(item.FilePath);
+                
+                if (!string.IsNullOrEmpty(item.ThumbnailPath) && File.Exists(item.ThumbnailPath))
+                {
+                    try
+                    {
+                        File.Delete(item.ThumbnailPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Failed to delete thumbnail: {ex.Message}");
+                    }
+                }
+            }
 
             await MediaLibraryService.Instance.SaveLibraryAsync(MediaInfos.ToList());
         }
