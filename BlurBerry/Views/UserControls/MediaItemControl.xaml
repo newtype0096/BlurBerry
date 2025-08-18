@@ -8,7 +8,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited">
+    <Grid
+        PointerEntered="Grid_PointerEntered"
+        PointerExited="Grid_PointerExited"
+        PointerReleased="Grid_PointerReleased">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -52,11 +55,11 @@
             <Border
                 x:Name="DurationOverlay"
                 Margin="8"
+                Padding="6,2"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Background="#CC000000"
                 CornerRadius="4"
-                Padding="6,2"
                 Visibility="{Binding MediaType, Converter={StaticResource MediaTypeToVisibilityConverter}}">
                 <TextBlock
                     FontSize="12"

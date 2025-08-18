@@ -3,8 +3,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using BlurBerry.Models;
-using System;
 using System.ComponentModel;
+using BlurBerry.Views.Windows;
 
 namespace BlurBerry.Views.UserControls
 {
@@ -92,6 +92,15 @@ namespace BlurBerry.Views.UserControls
                 {
                     VisualStateManager.GoToState(this, "Normal", true);
                 }
+            }
+        }
+
+        private void Grid_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            if (DataContext is MediaInfo mediaInfo)
+            {
+                var mainWindow = App.MainWindow as MainWindow;
+                mainWindow?.NavigateToEditPage(mediaInfo);
             }
         }
     }

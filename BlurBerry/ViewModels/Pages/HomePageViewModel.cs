@@ -15,7 +15,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Search;
 using WinRT.Interop;
 
-namespace BlurBerry.ViewModels
+namespace BlurBerry.ViewModels.Pages
 {
     public enum MediaFilterType
     {
