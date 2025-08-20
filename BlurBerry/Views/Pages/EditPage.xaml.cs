@@ -1,4 +1,5 @@
 using BlurBerry.Models;
+using BlurBerry.ViewModels.Pages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Imaging;
@@ -16,6 +17,7 @@ namespace BlurBerry.Views.Pages
         public EditPage()
         {
             InitializeComponent();
+            DataContext = EditPageViewModel.Instance;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -25,6 +27,7 @@ namespace BlurBerry.Views.Pages
             if (e.Parameter is MediaInfo mediaInfo)
             {
                 _mediaInfo = mediaInfo;
+                EditPageViewModel.Instance.SetSelectedMedia(mediaInfo);
             }
         }
     }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="BlurBerry.Views.UserControls.ProjectPanelControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:BlurBerry.Views.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="15">
+                <TreeView Grid.Row="0" AllowDrop="True">
+                    <!--<TreeViewItem Header="블러 제외 목록" IsExpanded="True">
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                            <TreeViewItem Header="대상 #0" />
+                        </TreeViewItem>
+
+                        <TreeViewItem Header="커스텀 블러 목록" IsExpanded="True">
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                            <TreeViewItem Header="영역 #0" />
+                        </TreeViewItem>-->
+                </TreeView>
+            </Grid>
+
+            <local:MediaInfoPanelControl Grid.Row="1" />
+        </Grid>
+    </ScrollViewer>
+</UserControl>

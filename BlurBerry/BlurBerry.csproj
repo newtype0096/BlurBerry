@@ -15,6 +15,10 @@
   <ItemGroup>
     <None Remove="Views\Pages\HomePage.xaml" />
     <None Remove="Views\Pages\SettingsPage.xaml" />
+    <None Remove="Views\UserControls\BottomSideBarControl.xaml" />
+    <None Remove="Views\UserControls\MediaInfoPanelControl.xaml" />
+    <None Remove="Views\UserControls\RightSideBarControl.xaml" />
+    <None Remove="Views\UserControls\VideoCanvasControl.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +47,8 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250606001" />
+    <PackageReference Include="OpenCvSharp4" Version="4.11.0.20250507" />
+    <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.11.0.20250507" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Pages\HomePage.xaml">
@@ -56,6 +62,31 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Windows\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\UserControls\MediaInfoPanelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\UserControls\VideoCanvasControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\UserControls\BottomSideBarControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\UserControls\ProjectPanelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\UserControls\RightSideBarControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!--
