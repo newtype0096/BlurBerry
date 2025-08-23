@@ -1,7 +1,11 @@
 using BlurBerry.Models;
+using BlurBerry.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.IO;
+using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace BlurBerry.ViewModels.Pages
 {
@@ -93,11 +97,108 @@ namespace BlurBerry.ViewModels.Pages
 
         public bool IsVideo => SelectedMediaInfo?.MediaType == MediaType.Video;
 
+        private BitmapImage? _currentFrame;
+        public BitmapImage? CurrentFrame
+        {
+            get => _currentFrame;
+            set => SetProperty(ref _currentFrame, value);
+        }
+
+        private bool _isFrameLoading;
+        public bool IsFrameLoading
+        {
+            get => _isFrameLoading;
+            set => SetProperty(ref _isFrameLoading, value);
+        }
+
         private EditPageViewModel() { }
 
-        public void SetSelectedMedia(MediaInfo mediaInfo)
+        public async void SetSelectedMedia(MediaInfo mediaInfo)
         {
             SelectedMediaInfo = mediaInfo;
+            
+            // 미디어 파일이 있고 비디오인 경우 첫 번째 프레임 로드
+            if (mediaInfo?.FilePath != null)
+            {
+                await LoadFirstFrameAsync();
+            }
+        }
+
+        /// <summary>
+        /// 선택된 미디어의 첫 번째 프레임을 로드합니다.
+        /// </summary>
+        public async Task LoadFirstFrameAsync()
+        {
+            if (string.IsNullOrEmpty(SelectedMediaInfo?.FilePath))
+            {
+                CurrentFrame = null;
+                return;
+            }
+
+            IsFrameLoading = true;
+
+            try
+            {
+                if (IsVideo)
+                {
+                    // 비디오 파일의 첫 번째 프레임 추출
+                    CurrentFrame = await OpenCVFrameService.Instance.ExtractFirstFrameAsync(SelectedMediaInfo.FilePath);
+                }
+                else
+                {
+                    // 이미지 파일을 직접 로드
+                    try
+                    {
+                        var file = await StorageFile.GetFileFromPathAsync(SelectedMediaInfo.FilePath);
+                        using var stream = await file.OpenAsync(FileAccessMode.Read);
+                        
+                        var bitmapImage = new BitmapImage();
+                        await bitmapImage.SetSourceAsync(stream);
+                        CurrentFrame = bitmapImage;
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"이미지 로드 실패: {ex.Message}");
+                        CurrentFrame = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"프레임 로드 실패: {ex.Message}");
+                CurrentFrame = null;
+            }
+            finally
+            {
+                IsFrameLoading = false;
+            }
+        }
+
+        /// <summary>
+        /// 지정된 시간 위치의 프레임을 로드합니다.
+        /// </summary>
+        /// <param name="timePositionMs">시간 위치(밀리초)</param>
+        public async Task LoadFrameAtTimeAsync(double timePositionMs)
+        {
+            if (!IsVideo || string.IsNullOrEmpty(SelectedMediaInfo?.FilePath))
+            {
+                return;
+            }
+
+            IsFrameLoading = true;
+
+            try
+            {
+                CurrentFrame = await OpenCVFrameService.Instance.ExtractFrameAtTimeAsync(SelectedMediaInfo.FilePath, timePositionMs);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"시간 기반 프레임 로드 실패: {ex.Message}");
+            }
+            finally
+            {
+                IsFrameLoading = false;
+            }
         }
     }
 }

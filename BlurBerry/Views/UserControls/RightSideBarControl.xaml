@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:BlurBerry.Views.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    MinWidth="300"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style TargetType="ToggleSwitch">

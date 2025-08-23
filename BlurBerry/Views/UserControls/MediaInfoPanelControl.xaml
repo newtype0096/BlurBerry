@@ -22,76 +22,78 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="15">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <TextBlock
-            Grid.Row="0"
-            Style="{StaticResource TextBlock_Normal}"
-            Text="미디어 정보" />
-
-        <Grid Grid.Row="1" Width="270">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
+    <Border BorderBrush="DimGray" BorderThickness="0,1,0,1">
+        <Grid Margin="15">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="30" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBlock
                 Grid.Row="0"
-                Grid.Column="0"
-                Text="파일명" />
+                Style="{StaticResource TextBlock_Normal}"
+                Text="미디어 정보" />
 
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Text="{Binding FileName}"
-                TextTrimming="CharacterEllipsis" />
+            <Grid Grid.Row="1" Width="270">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <TextBlock
-                Grid.Row="1"
-                Grid.Column="0"
-                Text="크기" />
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <TextBlock
-                Grid.Row="1"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Text="{Binding FormattedFileSize}" />
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Text="파일명" />
 
-            <TextBlock
-                Grid.Row="2"
-                Grid.Column="0"
-                Text="길이"
-                Visibility="{Binding IsVideo, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Text="{Binding FileName}"
+                    TextTrimming="CharacterEllipsis" />
 
-            <TextBlock
-                Grid.Row="2"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Text="{Binding FormattedDuration}"
-                Visibility="{Binding IsVideo, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Text="크기" />
 
-            <TextBlock
-                Grid.Row="3"
-                Grid.Column="0"
-                Text="타입" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Text="{Binding FormattedFileSize}" />
 
-            <TextBlock
-                Grid.Row="3"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Text="{Binding FileExtension}" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Text="길이"
+                    Visibility="{Binding IsVideo, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Text="{Binding FormattedDuration}"
+                    Visibility="{Binding IsVideo, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Text="타입" />
+
+                <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Text="{Binding FileExtension}" />
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </UserControl>

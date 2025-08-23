@@ -12,8 +12,6 @@ namespace BlurBerry.Views.Pages
 {
     public sealed partial class EditPage : Page
     {
-        private MediaInfo? _mediaInfo;
-
         public EditPage()
         {
             InitializeComponent();
@@ -26,7 +24,6 @@ namespace BlurBerry.Views.Pages
 
             if (e.Parameter is MediaInfo mediaInfo)
             {
-                _mediaInfo = mediaInfo;
                 EditPageViewModel.Instance.SetSelectedMedia(mediaInfo);
             }
         }

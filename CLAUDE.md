@@ -118,5 +118,28 @@ Main application logic handling:
 - Graceful fallback for missing files and failed operations
 - Null-safe operations throughout the codebase with nullable reference types
 
+## OpenCV Integration
+
+### OpenCVFrameService
+Singleton service for video frame extraction using OpenCVSharp4:
+- **ExtractFirstFrameAsync()**: Extracts first frame from video files
+- **ExtractFrameAtTimeAsync()**: Extracts frame at specific time position
+- **GetVideoInfo()**: Retrieves video metadata (FPS, resolution, duration)
+- **ConvertMatToBitmapImageAsync()**: Converts OpenCV Mat to WinUI3 BitmapImage
+
+### Video Display Architecture
+- **VideoCanvasControl**: Main media display area with zoom/pan support
+- **EditPageViewModel.CurrentFrame**: Bindable BitmapImage property
+- **EditPageViewModel.IsFrameLoading**: Loading state indicator
+- Automatic frame loading on media selection
+- Support for both video (OpenCV extraction) and image (direct loading) files
+
+### Frame Processing Flow
+1. MediaItemControl click → EditPage navigation
+2. EditPageViewModel.SetSelectedMedia() → LoadFirstFrameAsync()
+3. OpenCVFrameService.ExtractFirstFrameAsync() for videos
+4. Direct StorageFile loading for images
+5. VideoCanvasControl displays via CurrentFrame binding
+
 ## Localization
 The application uses Korean language strings throughout the UI. When adding new features, maintain consistency with existing Korean localization patterns.

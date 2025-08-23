@@ -6,9 +6,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:BlurBerry.Views.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    MinHeight="250"
     mc:Ignorable="d">
 
-    <Border>
+    <Border BorderBrush="#2a2a2a" BorderThickness="1,0,1,0">
         <Grid Margin="20,15">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

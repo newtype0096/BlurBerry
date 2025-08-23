@@ -47,7 +47,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250606001" />
-    <PackageReference Include="OpenCvSharp4" Version="4.11.0.20250507" />
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.11.0.20250507" />
     <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.11.0.20250507" />
   </ItemGroup>
   <ItemGroup>
