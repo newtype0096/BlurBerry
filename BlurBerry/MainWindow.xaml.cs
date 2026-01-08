@@ -24,6 +24,12 @@ namespace BlurBerry
         public static extern bool Initialize(int width, int height);
 
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool OpenVideo(string filepath);
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool GrabNextFrame();
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void Cleanup();
 
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
@@ -39,28 +45,31 @@ namespace BlurBerry
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            bool success = Initialize(3840, 2160);
-            if (!success)
+            // 1. 엔진 초기화 (4K)
+            if (!Initialize(3840, 2160))
             {
-                MessageBox.Show("DirectX 초기화 실패! (GPU 문제거나 DLL 경로 문제)");
+                MessageBox.Show("DirectX 초기화 실패!");
                 return;
             }
 
+            // 2. 비디오 파일 열기
+            string videoPath = @"C:\Users\M\Desktop\hevc_4k25P_main_2.mp4";
+            if (!OpenVideo(videoPath))
+            {
+                MessageBox.Show($"영상 열기 실패: {videoPath}");
+                return;
+            }
+
+            // 3. 브릿지 연결
             _backBufferHandle = GetSharedHandle();
-            if (_backBufferHandle == IntPtr.Zero)
-            {
-                MessageBox.Show("핸들 가져오기 실패!");
-                return;
-            }
-
             _d3dImage = new D3DImage();
-
             _d3dImage.Lock();
             _d3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, _backBufferHandle);
             _d3dImage.Unlock();
 
             VideoScreen.Source = _d3dImage;
 
+            // 4. 렌더링 시작
             CompositionTarget.Rendering += OnRendering;
         }
 
@@ -68,9 +77,15 @@ namespace BlurBerry
         {
             if (_d3dImage != null && _d3dImage.IsFrontBufferAvailable && _backBufferHandle != IntPtr.Zero)
             {
-                _d3dImage.Lock();
-                _d3dImage.AddDirtyRect(new Int32Rect(0, 0, _d3dImage.PixelWidth, _d3dImage.PixelHeight));
-                _d3dImage.Unlock();
+                // C++에게 "다음 프레임 가져와!" 명령
+                bool hasFrame = GrabNextFrame();
+
+                if (hasFrame)
+                {
+                    _d3dImage.Lock();
+                    _d3dImage.AddDirtyRect(new Int32Rect(0, 0, _d3dImage.PixelWidth, _d3dImage.PixelHeight));
+                    _d3dImage.Unlock();
+                }
             }
         }
 
