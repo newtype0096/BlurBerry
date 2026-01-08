@@ -4,6 +4,9 @@
 #include <d3d9.h>
 #include <vector>
 
+// OpenCV 헤더
+#include <opencv2/opencv.hpp>
+
 // FFmpeg 헤더
 extern "C" {
 #include <libavformat/avformat.h>
@@ -182,22 +185,45 @@ BLURBERRY_API bool GrabNextFrame()
             if (avcodec_send_packet(g_pCodecCtx, g_pPacket) == 0) {
                 if (avcodec_receive_frame(g_pCodecCtx, g_pFrame) == 0) {
 
-                    // 1. 디코딩 성공 -> BGRA 변환
+                    // 1. FFmpeg 디코딩 -> BGRA 버퍼 변환
                     uint8_t* dest[4] = { g_pixelBuffer.data(), nullptr, nullptr, nullptr };
                     int dest_linesize[4] = { g_width * 4, 0, 0, 0 };
 
                     sws_scale(g_pSwsCtx, g_pFrame->data, g_pFrame->linesize,
                         0, g_pCodecCtx->height, dest, dest_linesize);
 
-                    // 2. GPU 텍스처 업데이트
+                    // ========================================================
+                    // ★ Step 5: OpenCV 개입 (Zero-Copy)
+                    // ========================================================
+
+                    // g_pixelBuffer는 이미 메모리에 할당되어 있습니다.
+                    // cv::Mat 헤더만 만들어서 "이 메모리를 이미지처럼 다뤄라"고 지정합니다.
+                    // CV_8UC4: 8비트 Unsigned Char형 4채널 (B, G, R, A)
+                    cv::Mat frame(g_height, g_width, CV_8UC4, g_pixelBuffer.data(), g_width * 4);
+
+                    // 1) 테스트용: 빨간색 테두리 사각형 그리기
+                    // Scalar(B, G, R, A) 순서입니다. (BGRA 포맷이므로)
+                    // 좌표: (100, 100)에서 시작, 400x300 크기, 두께 5
+                    cv::rectangle(frame, cv::Rect(100, 100, 400, 300), cv::Scalar(0, 0, 255, 255), 5);
+
+                    // 2) 테스트용: 중앙에 텍스트 쓰기
+                    cv::putText(frame, "BlurBerry Engine Active", cv::Point(200, 200),
+                        cv::FONT_HERSHEY_SIMPLEX, 2.0, cv::Scalar(0, 255, 0, 255), 3);
+
+                    // [중요] cv::Mat은 포인터만 참조했으므로, 
+                    // 여기서 그림을 그리면 g_pixelBuffer 원본 데이터가 바로 수정됩니다.
+                    // ========================================================
+
+
+                    // 2. GPU 텍스처 업데이트 (수정된 g_pixelBuffer가 올라감)
                     g_pd3d11Context->UpdateSubresource(
                         g_pd3d11Texture, 0, nullptr,
                         g_pixelBuffer.data(), g_width * 4, 0
                     );
 
+                    // 3. GPU 명령 실행
                     g_pd3d11Context->Flush();
 
-                    // 패킷 해제하고 리턴 true
                     av_packet_unref(g_pPacket);
                     return true;
                 }
@@ -205,9 +231,8 @@ BLURBERRY_API bool GrabNextFrame()
         }
         av_packet_unref(g_pPacket);
     }
-    return false; // EOF or Error
+    return false;
 }
-
 BLURBERRY_API void Cleanup()
 {
     // FFmpeg 정리
